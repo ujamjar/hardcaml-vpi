@@ -22,7 +22,7 @@ vpi:
 	$(CC) -o _build/cosim.vpi \
 		`iverilog-vpi --ldflags` \
 		_build/cosim_o.o _build/cosim_c.o \
-		-L`opam config var lib`/ocaml \
+		-L`ocamlc -where` \
 		-L`opam config var lib`/ctypes \
 		-lunix -lbigarray -lcamlstr \
 		-lctypes_stubs -lctypes-foreign-base_stubs \

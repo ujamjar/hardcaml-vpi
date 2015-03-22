@@ -9,6 +9,8 @@ remove: [
   [make "uninstall"]
 ]
 depends: [
+  "ctypes"
+  "ctypes-foreign"
   "hardcaml"
 ]
 depexts: [
