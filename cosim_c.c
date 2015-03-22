@@ -218,11 +218,11 @@ static struct constant constants[] = {
 };
 
 extern uint32_t vpi_get_constant(char *, int);
-uint32_t vpi_get_constant(char *name, int value) {
+uint32_t vpi_get_constant(char *name, int val) {
   int i=0;
   while (i<(sizeof(constants)/sizeof(struct constant))) {
     if (0 == strcmp(constants[i].name, name)) 
-      return (value ? constants[i].value : 1);
+      return (val ? constants[i].value : 1);
     i++;
   }
   return 0;

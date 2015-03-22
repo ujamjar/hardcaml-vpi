@@ -18,7 +18,7 @@ vpi:
 	ocamlfind c -output-obj -package bigarray,num,hardcaml,ctypes.foreign -linkpkg -o cosim_o.o \
 		_build/vpi.cmo _build/cosim_icarus.cmo
 	mv cosim_o.o _build/cosim_o.o
-	$(CC) -c `iverilog-vpi --cflags` -g cosim_c.c -o _build/cosim_c.o
+	ocamlfind c -c -ccopt "`iverilog-vpi --cflags` -o _build/cosim_c.o" -g cosim_c.c 
 	$(CC) -o _build/cosim.vpi \
 		`iverilog-vpi --ldflags` \
 		_build/cosim_o.o _build/cosim_c.o \
