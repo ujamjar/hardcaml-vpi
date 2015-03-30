@@ -108,7 +108,7 @@ end)
 
 type cosim_state = Vpi.vpiHandle SMap.t
 
-let vpi_recv_ctrl socket = Comms.recv socket
+let vpi_recv_ctrl socket = try Comms.recv socket with _ -> (vpi_control vpiFinish; exit 0)
 let vpi_get_ctrl data = 
   match (Marshal.from_string data 0 : control_message) with
   | Finish -> ignore @@ vpi_control vpiFinish; failwith "finished"
@@ -181,7 +181,7 @@ let hardcaml_cosim _ =
   (* say hello *)
   let _ = Comms.send_string client "hello hardcaml" in
   (* get back list of ports from server *)
-  let ports = (Marshal.from_string (Comms.recv client) 0 : init_message) in
+  let ports = (Marshal.from_string (vpi_recv_ctrl client) 0 : init_message) in
   (* find the ports in simulation object *)
   let state = init_state ports in
   (* start simulation at time 0 *)
@@ -193,4 +193,5 @@ let init_vpi () =
   register_callback ~reason ~time:(addr time_0) hardcaml_cosim
 
 let () = Callback.register "init_vpi" init_vpi
+
 

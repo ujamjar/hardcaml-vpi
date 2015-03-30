@@ -24,7 +24,7 @@ vpi:
 		_build/cosim_o.o _build/cosim_c.o \
 		-L`ocamlc -where` \
 		-L`opam config var lib`/ctypes \
-		-lunix -lbigarray -lcamlstr \
+		-lunix -lbigarray -lcamlstr -lnums \
 		-lctypes_stubs -lctypes-foreign-base_stubs \
 		-lcamlrun_shared -lffi -ldl -lm \
 		`iverilog-vpi --ldlibs` \
