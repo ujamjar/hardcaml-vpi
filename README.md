@@ -1,5 +1,31 @@
 # HardCaml Verilog interface
 
-Builds a shared library which can be loaded into the Icarus Verilog
-simulator to communicate with HardCaml.  This allows an HardCaml/OCaml 
-based testbench to interact with a Verilog based model.
+Builds an OCaml socket server as an Icarus Verilog VPI
+module.  The OCaml module accesses the simulator VPI APIs and
+exposes a simple interface API to control/query a simulation
+over a socket.
+
+```
++--------------+
+|  iverilog    |
+| +----------+ |
+| |simulation| |
+| +----------+ |
+|     | (vpi)  |
+| +----------+ |
+| | HardCaml | |
+| |   vpi    | |
+| |shared lib| |
+| +----------+ |
++--------------+
+      | (socket)
++--------------+
+|   HardCaml   |
+|   testbench  |
++--------------+
+```
+
+* Build a testbench in OCaml for a Verilog model
+
+* Generate Verilog from a HardCaml design and use Icarus Verilog as a simulation backend.
+

@@ -1,1 +1,4 @@
-<*.{ml,mli}> : package(ctypes.foreign, hardcaml)
+true: package(ctypes.foreign, hardcaml)
+"cosim_c.c": iverilog
+#true: ocaml_verbose
+

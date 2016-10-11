@@ -12,30 +12,19 @@
 
 all: vpi
 
-# icarus verilog VPI cosim interface
-vpi: 
-	ocamlbuild -use-ocamlfind $(BUILD_OPTS) cosim_icarus.cmo vpi.cmo
-	ocamlfind c -output-obj -package bigarray,num,hardcaml,ctypes.foreign -linkpkg -o cosim_o.o \
-		_build/vpi.cmo _build/cosim_icarus.cmo
-	mv cosim_o.o _build/cosim_o.o
-	ocamlfind c -c -ccopt "`iverilog-vpi --cflags` -o _build/cosim_c.o" -g cosim_c.c 
-	$(CC) -o _build/cosim.vpi \
-		`iverilog-vpi --ldflags` \
-		_build/cosim_o.o _build/cosim_c.o \
-		-L`ocamlc -where` \
-		-L`opam config var lib`/ctypes \
-		-lunix -lbigarray -lcamlstr -lnums \
-		-lctypes_stubs -lctypes-foreign-base_stubs \
-		-lcamlrun_shared -lffi -ldl -lm \
-		`iverilog-vpi --ldlibs` \
-		-Wl,-E
+VPI_CFLAGS=`iverilog-vpi --cflags`
+VPI_LDFLAGS=`iverilog-vpi --ldflags`
+VPI_LDLIBS=`iverilog-vpi --ldlibs`
+OCAML_LDPATH=`ocamlc -where`
+CTYPES_LDPATH=`opam config var ctypes:lib`
 
-install:
-	ocamlfind install hardcaml-vpi META \
-		hardcaml_vvp.sh _build/cosim.vpi
-
-uninstall: 
-	ocamlfind remove hardcaml-vpi
+vpi:
+	VPI_CFLAGS=${VPI_CFLAGS} \
+	VPI_LDFLAGS=${VPI_LDFLAGS} \
+	VPI_LDLIBS=${VPI_LDLIBS} \
+	OCAML_LDPATH=${OCAML_LDPATH} \
+	CTYPES_LDPATH=${CTYPES_LDPATH} \
+	ocaml pkg/pkg.ml build
 
 clean:
 	ocamlbuild -clean

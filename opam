@@ -1,14 +1,11 @@
 opam-version: "0.1"
 maintainer: "andy.ray@ujamjar.com"
 homepage: "https://github.com/ujamjar/hardcaml-vpi"
-build: [
-  [make "all"]
-  [make "install"]
-]
-remove: [
-  [make "uninstall"]
-]
+build: [ [make "vpi"] ]
 depends: [
+  "ocamlfind" {build}
+  "ocamlbuild" {build}
+  "topkg" {build}
   "ctypes"
   "ctypes-foreign"
   "hardcaml"
