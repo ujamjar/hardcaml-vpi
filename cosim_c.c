@@ -206,7 +206,7 @@ static struct constant constants[] = {
   C(vpiError                  ),
   C(vpiSystem                 ),
   C(vpiInternal               ),
-                              
+#if VER_097                            
   C(_vpiFromThr               ),
   C(_vpiNoThr                 ),
   C(_vpiString                ),
@@ -215,6 +215,7 @@ static struct constant constants[] = {
   C(_vpi_at_PV                ),
   C(_vpi_at_A                 ),
   C(_vpi_at_APV               ),
+#endif
 };
 
 extern uint32_t vpi_get_constant(char *, int);
