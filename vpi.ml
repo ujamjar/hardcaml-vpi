@@ -190,14 +190,14 @@ module Constants = struct
   let vpiError                  = find "vpiError"
   let vpiSystem                 = find "vpiSystem"
   let vpiInternal               = find "vpiInternal"
-  let _vpiFromThr               = find "_vpiFromThr"
+  (*let _vpiFromThr               = find "_vpiFromThr"
   let _vpiNoThr                 = find "_vpiNoThr"
   let _vpiString                = find "_vpiString"
   let _vpiVThr                  = find "_vpiVThr"
   let _vpiWord                  = find "_vpiWord"
   let _vpi_at_PV                = find "_vpi_at_PV"
   let _vpi_at_A                 = find "_vpi_at_A"
-  let _vpi_at_APV               = find "_vpi_at_APV"
+  let _vpi_at_APV               = find "_vpi_at_APV"*)
 end
 
 type ('a,'b) struct_field = ('a, ('b, [ `Struct ]) structured) field

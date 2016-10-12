@@ -183,14 +183,14 @@ module Constants : sig
   val vpiError : int32
   val vpiSystem : int32
   val vpiInternal : int32
-  val _vpiFromThr : int32
+  (*val _vpiFromThr : int32
   val _vpiNoThr : int32
   val _vpiString : int32
   val _vpiVThr : int32
   val _vpiWord : int32
   val _vpi_at_PV : int32
   val _vpi_at_A : int32
-  val _vpi_at_APV : int32
+  val _vpi_at_APV : int32*)
 end
 
 type ('a,'b) struct_field = ('a, ('b, [ `Struct ]) structured) field

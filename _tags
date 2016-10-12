@@ -1,4 +1,4 @@
-true: package(ctypes.foreign, hardcaml)
+true: package(ctypes.foreign), package(hardcaml)
 "cosim_c.c": iverilog
 #true: ocaml_verbose
 

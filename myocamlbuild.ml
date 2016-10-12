@@ -39,6 +39,9 @@ let () = dispatch @@ function
     flag ["ocaml_verbose"; "ocaml"; "compile"] @@ S[A"-verbose"];
     flag ["ocaml_versboe"; "ocaml"; "link"] @@ S[A"-verbose"];
 
+    (* add flag not available in ocaml 4.01.0 (which uses ocamlbuild.0) *)
+    flag ["link"; "ocaml"; "output_obj"] @@ A"-linkpkg";
+
     let args f l = List.map f (split ((=)' ') l) in
 
     (* cosim_c.c should be compiled against the iverilog-vpi header/flags *)
