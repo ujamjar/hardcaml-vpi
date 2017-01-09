@@ -8,7 +8,7 @@
 #
 ########################################
 
-.PHONY: all vpi install uninstall clean 
+.PHONY: all vpi clean tags prepare publish
 
 all: vpi
 
@@ -19,6 +19,7 @@ OCAML_LDPATH=`ocamlc -where`
 CTYPES_LDPATH=`opam config var ctypes:lib`
 
 vpi:
+	cp pkg/META.in pkg/META
 	VPI_CFLAGS=${VPI_CFLAGS} \
 	VPI_LDFLAGS=${VPI_LDFLAGS} \
 	VPI_LDLIBS=${VPI_LDLIBS} \
@@ -29,4 +30,19 @@ vpi:
 clean:
 	ocamlbuild -clean
 	- find . -name "*~" | xargs rm
+
+VERSION      := $$(opam query --version)
+NAME_VERSION := $$(opam query --name-version)
+ARCHIVE      := $$(opam query --archive)
+
+tag:
+	git tag -a "v$(VERSION)" -m "v$(VERSION)."
+	git push origin v$(VERSION)
+
+prepare:
+	opam publish prepare -r hardcaml $(NAME_VERSION) $(ARCHIVE)
+
+publish:
+	opam publish submit -r hardcaml $(NAME_VERSION)
+	rm -rf $(NAME_VERSION)
 

@@ -1,3 +1,7 @@
+# v0.3.1
+
+* opam publish
+
 # v0.3.0
 
 * Port to topkg and ocamlbuild
