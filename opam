@@ -19,7 +19,7 @@ depexts: [
 ]
 available: [ os != "darwin" & ocaml-version >= "4.02.0" ]
 name: "hardcaml-vpi"
-version: "0.3.1"
+version: "0.3.2"
 license: "ISC"
 substs:[ "pkg/META" ]
 

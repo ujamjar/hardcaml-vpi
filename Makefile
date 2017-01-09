@@ -18,8 +18,10 @@ VPI_LDLIBS=`iverilog-vpi --ldlibs`
 OCAML_LDPATH=`ocamlc -where`
 CTYPES_LDPATH=`opam config var ctypes:lib`
 
-vpi:
+pkg/META: pkg/META.in
 	cp pkg/META.in pkg/META
+
+vpi: pkg/META
 	VPI_CFLAGS=${VPI_CFLAGS} \
 	VPI_LDFLAGS=${VPI_LDFLAGS} \
 	VPI_LDLIBS=${VPI_LDLIBS} \

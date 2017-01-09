@@ -1,3 +1,7 @@
+# v0.3.2
+
+* opam publish - fix META file generation
+
 # v0.3.1
 
 * opam publish
