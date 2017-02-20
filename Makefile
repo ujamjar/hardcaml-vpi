@@ -31,7 +31,10 @@ vpi: pkg/META
 
 clean:
 	ocamlbuild -clean
-	- find . -name "*~" | xargs rm
+	rm -f *~
+	rm -f src/*~
+	rm -f transcript verilog.log
+	rm -fr work
 
 VERSION      := $$(opam query --version)
 NAME_VERSION := $$(opam query --name-version)
@@ -47,4 +50,52 @@ prepare:
 publish:
 	opam publish submit -r hardcaml $(NAME_VERSION)
 	rm -rf $(NAME_VERSION)
+
+###########################################################
+# A new dawn cometh
+
+shared: hc_ivl.vpi hc_cvc.vpi hc_mti.vpi
+
+# Icarus verilog
+hc.vpi: src/hardcaml_vpi.c
+	gcc `iverilog-vpi --cflags` \
+		  `iverilog-vpi --ldflags ` src/hardcaml_vpi.c \
+			`iverilog-vpi --ldlibs` -g -o hc_ivl.vpi
+
+test.vvp: test.v
+	iverilog test.v -o test.vvp
+
+icarus: hc.vpi test.vvp
+	vvp -M . -m hc_ivl test.vvp
+
+# CVC64
+CVC_INC ?= /home/andyman/dev/bitbucket/janest/ujamjar-janestreet/dev/tools/open-src-cvc.700c/pli_incs
+hc_cvc.vpi: src/hardcaml_vpi.c
+	gcc -c -g -fPIC \
+		-I $(CVC_INC) \
+		src/hardcaml_vpi.c 
+	ld -G -shared -export-dynamic src/hardcaml_vpi.o -o hc_cvc.vpi
+
+cvcsim: hc_cvc.vpi
+	cvcdir/src/cvc64 -q +loadvpi=./hc_cvc.vpi:init_vpi_startup test.v
+
+cvcrun: cvcsim
+	./cvcsim
+
+# Modelsim
+MTI_INC ?= /home/andyman/intelFPGA/16.1/modelsim_ase/include
+hc_mti.vpi: hardcaml_vpi.c
+	gcc -m32 -g -fPIC -shared -o hc_mti.vpi \
+		-I $(MTI_INC) \
+		hardcaml_vpi.c 
+
+mtirun: hc_mti.vpi
+	vlib work
+	vlog test.v
+	vsim -c -pli ./hc_mti.vpi test -do "run -a"
+
+#########
+
+cleaner:
+	rm *.o cvcsim *.vvp *.vpi
 

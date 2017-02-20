@@ -21,6 +21,9 @@ let vpi_ldlibs = getenv "VPI_LDLIBS"
 let ocaml_ldpath = getenv "OCAML_LDPATH"
 let ctypes_ldpath = getenv "CTYPES_LDPATH"
 
+let mti_inc = "/home/andyman/intelFPGA/16.1/modelsim_ase/include"
+let cvc_inc = "/home/andyman/dev/bitbucket/janest/ujamjar-janestreet/dev/tools/open-src-cvc.700c/pli_incs"
+
 let libs = [
   (* ocaml stdlib *)
   "unix"; "bigarray"; "camlstr"; "nums";
@@ -56,15 +59,15 @@ let () = dispatch @@ function
     flag ["ctypes_ldpath"] @@ A("-L"^ctypes_ldpath);
 
     (* link the vpi object *)
-    rule "linkerizer"
-      ~prods:["cosim.vpi"]
-      ~deps:["cosim_c.o"; "cosim_icarus.byte.o"]
+    rule "cosim_ocaml_linker"
+      ~prods:["src/cosim.vpi"]
+      ~deps:["src/cosim_c.o"; "src/cosim_icarus.byte.o"]
       (fun env _ ->
         Cmd(S[
           A"cc"; A"-o"; A"cosim.vpi"; 
             (* flags for linking icarus vpi objects *)
             t["vpi_ldflags"];
-            A"cosim_icarus.byte.o"; A"cosim_c.o";
+            A"cosim_icarus.byte.o"; A"src/cosim_c.o";
             (* path to ocaml libs *)
             t["ocaml_ldpath"];
             (* path to ctypes libs *)
@@ -74,7 +77,36 @@ let () = dispatch @@ function
             (* required icarus verilog libraries *)
             t["vpi_ldlibs"];
             A"-Wl,-E"
-        ]))
+        ]));
+
+    rule "hc_ivl.vpi"
+      ~prods:["hc_ivl.vpi"]
+      ~deps:["src/hardcaml_vpi.c"]
+      (fun env _ ->
+         Cmd(S[
+             A"gcc"; 
+             Sh"`iverilog-vpi --cflags`"; 
+             Sh"`iverilog-vpi --ldflags `"; 
+             Sh"`iverilog-vpi --ldlibs`"; 
+             A"src/hardcaml_vpi.c";
+             A"-g"; A"-o"; A"hc_ivl.vpi" ]));
+
+    rule "hc_cvc.vpi"
+      ~prods:["hc_cvc.vpi"]
+      ~deps:["src/hardcaml_vpi.c"]
+      (fun env _ ->
+         let c s = Cmd(S(List.map (fun x -> A x) (split ((=)' ') s))) in
+         Seq[
+           c("gcc -c -g -fPIC -I "^cvc_inc^" src/hardcaml_vpi.c");
+           c"ld -G -shared -export-dynamic hardcaml_vpi.o -o hc_cvc.vpi";
+         ]);
+
+    rule "hc_mti.vpi"
+      ~prods:["hc_mti.vpi"]
+      ~deps:["src/hardcaml_vpi.c"]
+      (fun env _ ->
+        let c s = Cmd(S(List.map (fun x -> A x) (split ((=)' ') s))) in
+	      c("gcc -m32 -g -fPIC -shared -o hc_mti.vpi -I "^mti_inc^" src/hardcaml_vpi.c"));
 
   end
   | _ -> ()

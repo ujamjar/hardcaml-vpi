@@ -1,4 +1,9 @@
 _build/
+work/
 *~
 .*.swp
-
+transcript
+verilog.log
+mtidir
+cvcdir
+.gdb_history
