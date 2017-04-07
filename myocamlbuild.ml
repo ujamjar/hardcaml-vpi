@@ -18,11 +18,14 @@ let rec split at_ str =
 let vpi_cflags = getenv "VPI_CFLAGS"
 let vpi_ldflags = getenv "VPI_LDFLAGS"
 let vpi_ldlibs = getenv "VPI_LDLIBS"
+
 let ocaml_ldpath = getenv "OCAML_LDPATH"
 let ctypes_ldpath = getenv "CTYPES_LDPATH"
 
-let mti_inc = "/home/andyman/intelFPGA/16.1/modelsim_ase/include"
-let cvc_inc = "/home/andyman/dev/bitbucket/janest/ujamjar-janestreet/dev/tools/open-src-cvc.700c/pli_incs"
+let mti_inc = getenv "MTI_PATH"
+
+let cvc_inc = "???" (* how can we find this path? 
+                       (assuming we can get the simulator to work at all!) *)
 
 let libs = [
   (* ocaml stdlib *)
