@@ -13,6 +13,7 @@ let () =
   Ok ([
     Pkg.lib ~cond:ivl "cosim.vpi";
     Pkg.lib ~cond:mti "hc_mti.vpi";
+    Pkg.lib ~cond:mti "hc_mti64.vpi";
     Pkg.lib ~cond:false "hc_cvc.vpi";
     Pkg.lib ~cond:ivl "hc_ivl.vpi";
     Pkg.bin ~auto:false "hardcaml_vvp.sh"

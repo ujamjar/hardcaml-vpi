@@ -112,6 +112,13 @@ let () = dispatch @@ function
         let c s = Cmd(S(List.map (fun x -> A x) (split ((=)' ') s))) in
 	      c("gcc -m32 -std=c99 -g -fPIC -shared -o hc_mti.vpi -I "^mti_inc^" src/hardcaml_vpi.c"));
 
+    rule "hc_mti64.vpi"
+      ~prods:["hc_mti64.vpi"]
+      ~deps:["src/hardcaml_vpi.c"]
+      (fun env _ ->
+        let c s = Cmd(S(List.map (fun x -> A x) (split ((=)' ') s))) in
+	      c("gcc -std=c99 -g -fPIC -shared -o hc_mti64.vpi -I "^mti_inc^" src/hardcaml_vpi.c"));
+
   end
   | _ -> ()
 
