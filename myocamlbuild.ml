@@ -92,6 +92,7 @@ let () = dispatch @@ function
              Sh"`iverilog-vpi --ldflags `"; 
              Sh"`iverilog-vpi --ldlibs`"; 
              A"src/hardcaml_vpi.c";
+             A"-std=c99";
              A"-g"; A"-o"; A"hc_ivl.vpi" ]));
 
     rule "hc_cvc.vpi"
@@ -100,7 +101,7 @@ let () = dispatch @@ function
       (fun env _ ->
          let c s = Cmd(S(List.map (fun x -> A x) (split ((=)' ') s))) in
          Seq[
-           c("gcc -c -g -fPIC -I "^cvc_inc^" src/hardcaml_vpi.c");
+           c("gcc -c -std=c99 -g -fPIC -I "^cvc_inc^" src/hardcaml_vpi.c");
            c"ld -G -shared -export-dynamic hardcaml_vpi.o -o hc_cvc.vpi";
          ]);
 
@@ -109,7 +110,7 @@ let () = dispatch @@ function
       ~deps:["src/hardcaml_vpi.c"]
       (fun env _ ->
         let c s = Cmd(S(List.map (fun x -> A x) (split ((=)' ') s))) in
-	      c("gcc -m32 -g -fPIC -shared -o hc_mti.vpi -I "^mti_inc^" src/hardcaml_vpi.c"));
+	      c("gcc -m32 -std=c99 -g -fPIC -shared -o hc_mti.vpi -I "^mti_inc^" src/hardcaml_vpi.c"));
 
   end
   | _ -> ()

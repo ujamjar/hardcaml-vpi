@@ -1,3 +1,4 @@
+#define _XOPEN_SOURCE 500
 #include <stdlib.h>
 #include <memory.h>
 #include <stdio.h>
@@ -6,6 +7,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <string.h>
+#include <strings.h>
 #include "vpi_user.h"
 
 #define printf vpi_printf
@@ -83,11 +85,11 @@ int create_client(char *server, int port) {
   if (fd < 0) goto error;
   
   he = gethostbyname(server);
-  if (NULL == he || NULL == he->h_addr) 
+  if (NULL == he || NULL == he->h_addr_list[0]) 
     goto error_close_sock;
 
   saddr.sin_family = AF_INET;
-  bcopy(he->h_addr, &(saddr.sin_addr.s_addr), he->h_length);
+  bcopy(he->h_addr_list[0], &(saddr.sin_addr.s_addr), he->h_length);
   saddr.sin_port = htons(port);
 
   if (connect(fd, (struct sockaddr *) &saddr, sizeof(saddr)) < 0) 
